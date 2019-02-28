@@ -1,6 +1,6 @@
 # Comgo
 
-Comgo is a [GO](https://en.wikipedia.org/wiki/Go_(programming_language)) based project for parsing [COMTRADE](https://en.wikipedia.org/wiki/Comtrade) files and plotting transient waveforms.
+Comgo is a [GO](https://en.wikipedia.org/wiki/Go_(programming_language)) based tiny project for parsing [COMTRADE](https://en.wikipedia.org/wiki/Comtrade) files.
 
 
 ### Description
@@ -25,18 +25,18 @@ Comgo is a [GO](https://en.wikipedia.org/wiki/Go_(programming_language)) based p
 a. Download and install it
 
 ```sh
-    $ go get github.com/ValleyZW/comgo
+    $ go get github.com/ValleyZw/comgo
 ```
 
 b. Import it in your code
 
 ```go
-    import "github.com/ValleyZW/comgo"
+    import "github.com/ValleyZw/comgo"
 ```
 
 c. Init private variable
 ```go
-    var cfg comgo.CFG
+    cfg := comgo.New()
 ```
 
 d. Open and read cfg
@@ -55,6 +55,3 @@ f. Get value of specific channel
 ```go
 points, err := cfg.GetAnalogChannelData(channelNum)
 ```
-
-### Examples
-See [examples](./examples/README.md)
