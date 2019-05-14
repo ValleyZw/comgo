@@ -493,19 +493,13 @@ func (cfg *CFG) ReadCFG(rd io.Reader) (err error) {
 		if num, err := strconv.ParseFloat(ByteToString(tempList[5]), 64); err != nil {
 			return err
 		} else {
-			factor := chA.GetConversionFactors()
-			if val, ok := factor["a"]; ok {
-				chA.ConversionFactors["a"] = append(val, num)
-			}
+			chA.ConversionFactors["a"] = append(chA.GetConversionFactors()["a"], num)
 		}
 		// Conversion factor B
 		if num, err := strconv.ParseFloat(ByteToString(tempList[6]), 64); err != nil {
 			return err
 		} else {
-			factor := chA.GetConversionFactors()
-			if val, ok := factor["b"]; ok {
-				chA.ConversionFactors["b"] = append(val, num)
-			}
+			chA.ConversionFactors["b"] = append(chA.GetConversionFactors()["b"], num)
 		}
 		// Time factor
 		if num, err := strconv.ParseFloat(ByteToString(tempList[7]), 64); err != nil {
