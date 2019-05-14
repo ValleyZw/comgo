@@ -54,6 +54,133 @@ type CFG struct {
 	DataFileContent []byte
 }
 
+func (cfg *CFG) GetStationName() string {
+	if cfg != nil {
+		return cfg.StationName
+	}
+	return ""
+}
+
+func (cfg *CFG) GetRecordDeviceId() string {
+	if cfg != nil {
+		return cfg.RecordDeviceId
+	}
+	return ""
+}
+
+func (cfg *CFG) GetRevisionYear() uint16 {
+	if cfg != nil {
+		return cfg.RevisionYear
+	}
+	return 0
+}
+
+func (cfg *CFG) GetChannelNumber() uint16 {
+	if cfg != nil {
+		return cfg.ChannelNumber
+	}
+	return 0
+}
+
+func (cfg *CFG) GetAnalogDetail() *ChannelA {
+	if cfg != nil {
+		return cfg.AnalogDetail
+	}
+	return nil
+}
+
+func (cfg *CFG) GetDigitDetail() *ChannelD {
+	if cfg != nil {
+		return cfg.DigitDetail
+	}
+	return nil
+}
+
+func (cfg *CFG) GetLineFrequency() uint16 {
+	if cfg != nil {
+		return cfg.LineFrequency
+	}
+	return 0
+}
+
+func (cfg *CFG) GetSampleRateNum() uint16 {
+	if cfg != nil {
+		return cfg.SampleRateNum
+	}
+	return 0
+}
+
+func (cfg *CFG) GetSampleDetail() []SampleRate {
+	if cfg != nil {
+		return cfg.SampleDetail
+	}
+	return nil
+}
+
+func (cfg *CFG) GetStartTime() time.Time {
+	if cfg != nil {
+		return cfg.StartTime
+	}
+	return time.Time{}
+}
+
+func (cfg *CFG) GetTriggerTime() time.Time {
+	if cfg != nil {
+		return cfg.TriggerTime
+	}
+	return time.Time{}
+}
+
+func (cfg *CFG) GetDataFileType() string {
+	if cfg != nil {
+		return cfg.DataFileType
+	}
+	return ""
+}
+
+func (cfg *CFG) GetTimeFactor() float64 {
+	if cfg != nil {
+		return cfg.TimeFactor
+	}
+	return 0
+}
+
+func (cfg *CFG) GetDataFileContent() []byte {
+	if cfg != nil {
+		return cfg.DataFileContent
+	}
+	return nil
+}
+
+// Return the sampling rate
+// only one sampling rate is taking into account
+func (cfg *CFG) GetSamplingRate() float64 {
+	sampleDetail := cfg.GetSampleDetail()
+	if sampleDetail == nil || len(sampleDetail) == 0 {
+		return 0
+	}
+	return sampleDetail[0].GetRate()
+}
+
+// Return the number of samples
+// only one sampling rate is taking into account
+func (cfg *CFG) GetSamplingNumber() int {
+	sampleDetail := cfg.GetSampleDetail()
+	if sampleDetail == nil || len(sampleDetail) == 0 {
+		return 0
+	}
+	return sampleDetail[0].GetNumber()
+}
+
+// Return the names of all analog channel
+func (cfg *CFG) GetAnalogChannelNames() []string {
+	analogDetail := cfg.GetAnalogDetail()
+	if analogDetail != nil {
+		return analogDetail.ChannelNames
+	}
+	return nil
+}
+
 /*
  * ChannelA - Analog channel parameters
  * @ChannelTotal: Total number of channels
@@ -84,6 +211,90 @@ type ChannelA struct {
 	Secondary         []float64
 }
 
+func (m *ChannelA) GetChannelTotal() uint16 {
+	if m != nil {
+		return m.ChannelTotal
+	}
+	return 0
+}
+
+func (m *ChannelA) GetChannelNumber() []uint16 {
+	if m != nil {
+		return m.ChannelNumber
+	}
+	return nil
+}
+
+func (m *ChannelA) GetChannelNames() []string {
+	if m != nil {
+		return m.ChannelNames
+	}
+	return nil
+}
+
+func (m *ChannelA) GetChannelPhases() []string {
+	if m != nil {
+		return m.ChannelPhases
+	}
+	return nil
+}
+
+func (m *ChannelA) GetChannelElements() []string {
+	if m != nil {
+		return m.ChannelElements
+	}
+	return nil
+}
+
+func (m *ChannelA) GetChannelUnits() []string {
+	if m != nil {
+		return m.ChannelUnits
+	}
+	return nil
+}
+
+func (m *ChannelA) GetConversionFactors() map[string][]float64 {
+	if m != nil {
+		return m.ConversionFactors
+	}
+	return nil
+}
+
+func (m *ChannelA) GetTimeFactors() []float64 {
+	if m != nil {
+		return m.TimeFactors
+	}
+	return nil
+}
+
+func (m *ChannelA) GetValueMin() []int {
+	if m != nil {
+		return m.ValueMin
+	}
+	return nil
+}
+
+func (m *ChannelA) GetValueMax() []int {
+	if m != nil {
+		return m.ValueMax
+	}
+	return nil
+}
+
+func (m *ChannelA) GetPrimary() []float64 {
+	if m != nil {
+		return m.Primary
+	}
+	return nil
+}
+
+func (m *ChannelA) GetSecondary() []float64 {
+	if m != nil {
+		return m.Secondary
+	}
+	return nil
+}
+
 /*
  * ChannelD - Digit channel parameters
  * @ChannelTotal: Total number of channels
@@ -101,6 +312,48 @@ type ChannelD struct {
 	InitialState    []uint8
 }
 
+func (m *ChannelD) GetChannelTotal() uint16 {
+	if m != nil {
+		return m.ChannelTotal
+	}
+	return 0
+}
+
+func (m *ChannelD) GetChannelNumber() []uint16 {
+	if m != nil {
+		return m.ChannelNumber
+	}
+	return nil
+}
+
+func (m *ChannelD) GetChannelNames() []string {
+	if m != nil {
+		return m.ChannelNames
+	}
+	return nil
+}
+
+func (m *ChannelD) GetChannelPhases() []string {
+	if m != nil {
+		return m.ChannelPhases
+	}
+	return nil
+}
+
+func (m *ChannelD) GetChannelElements() []string {
+	if m != nil {
+		return m.ChannelElements
+	}
+	return nil
+}
+
+func (m *ChannelD) GetInitialState() []uint8 {
+	if m != nil {
+		return m.InitialState
+	}
+	return nil
+}
+
 /*
  * SampleRate - Sampling rate and sampling number
  * @Rate: Sampling rate
@@ -109,6 +362,20 @@ type ChannelD struct {
 type SampleRate struct {
 	Rate   float64
 	Number int
+}
+
+func (m *SampleRate) GetRate() float64 {
+	if m != nil {
+		return m.Rate
+	}
+	return 0
+}
+
+func (m *SampleRate) GetNumber() int {
+	if m != nil {
+		return m.Number
+	}
+	return 0
 }
 
 /*
@@ -121,6 +388,27 @@ type BinData struct {
 	Sample int32
 	Stamp  int32
 	Value  []int16
+}
+
+func (m *BinData) GetSample() int32 {
+	if m != nil {
+		return m.Sample
+	}
+	return 0
+}
+
+func (m *BinData) GetStamp() int32 {
+	if m != nil {
+		return m.Stamp
+	}
+	return 0
+}
+
+func (m *BinData) GetValue() []int16 {
+	if m != nil {
+		return m.Value
+	}
+	return nil
 }
 
 // Reads the Comtrade header file (.cfg).
@@ -185,7 +473,7 @@ func (cfg *CFG) ReadCFG(rd io.Reader) (err error) {
 	}
 
 	// Processing analog channels
-	for i := 0; i < int(chA.ChannelTotal); i++ {
+	for i := 0; i < int(chA.GetChannelTotal()); i++ {
 		tempList = bytes.Split(lines[2+i], []byte(","))
 		if len(tempList) < 10 {
 			return errors.New("cfg format error")
@@ -193,87 +481,93 @@ func (cfg *CFG) ReadCFG(rd io.Reader) (err error) {
 		if num, err := strconv.Atoi(ByteToString(tempList[0])); err != nil {
 			return err
 		} else {
-			chA.ChannelNumber = append(chA.ChannelNumber, uint16(num))
+			chA.ChannelNumber = append(chA.GetChannelNumber(), uint16(num))
 		}
 		// Format ids to xxx_xxx_xxx
-		chA.ChannelNames = append(chA.ChannelNames, ByteToString(bytes.Join(bytes.Split(tempList[1], []byte(" ")), []byte("_"))))
-		chA.ChannelPhases = append(chA.ChannelPhases, ByteToString(tempList[2]))
+		chA.ChannelNames = append(chA.GetChannelNames(), ByteToString(bytes.Join(bytes.Split(tempList[1], []byte(" ")), []byte("_"))))
+		chA.ChannelPhases = append(chA.GetChannelPhases(), ByteToString(tempList[2]))
 		// Channel element (usually null)
-		chA.ChannelElements = append(chA.ChannelElements, ByteToString(tempList[3]))
-		chA.ChannelUnits = append(chA.ChannelUnits, ByteToString(tempList[4]))
+		chA.ChannelElements = append(chA.GetChannelElements(), ByteToString(tempList[3]))
+		chA.ChannelUnits = append(chA.GetChannelUnits(), ByteToString(tempList[4]))
 		// Conversion factor A
 		if num, err := strconv.ParseFloat(ByteToString(tempList[5]), 64); err != nil {
 			return err
 		} else {
-			chA.ConversionFactors["a"] = append(chA.ConversionFactors["a"], num)
+			factor := chA.GetConversionFactors()
+			if val, ok := factor["a"]; ok {
+				chA.ConversionFactors["a"] = append(val, num)
+			}
 		}
 		// Conversion factor B
 		if num, err := strconv.ParseFloat(ByteToString(tempList[6]), 64); err != nil {
 			return err
 		} else {
-			chA.ConversionFactors["b"] = append(chA.ConversionFactors["b"], num)
+			factor := chA.GetConversionFactors()
+			if val, ok := factor["b"]; ok {
+				chA.ConversionFactors["b"] = append(val, num)
+			}
 		}
 		// Time factor
 		if num, err := strconv.ParseFloat(ByteToString(tempList[7]), 64); err != nil {
 			return err
 		} else {
-			chA.TimeFactors = append(chA.TimeFactors, num)
+			chA.TimeFactors = append(chA.GetTimeFactors(), num)
 		}
 		// Min Value at current channel
 		if num, err := strconv.Atoi(ByteToString(tempList[8])); err != nil {
 			return err
 		} else {
-			chA.ValueMin = append(chA.ValueMin, num)
+			chA.ValueMin = append(chA.GetValueMin(), num)
 		}
 		// Max Value at current channel
 		if num, err := strconv.Atoi(ByteToString(tempList[9])); err != nil {
 			return err
 		} else {
-			chA.ValueMax = append(chA.ValueMax, num)
+			chA.ValueMax = append(chA.GetValueMax(), num)
 		}
 
 		if len(tempList) > 10 {
 			if num, err := strconv.ParseFloat(ByteToString(tempList[10]), 64); err == nil {
-				chA.Primary = append(chA.Primary, num)
+				chA.Primary = append(chA.GetPrimary(), num)
 			}
 		}
 		if len(tempList) > 11 {
 			if num, err := strconv.ParseFloat(ByteToString(tempList[11]), 64); err == nil {
-				chA.Secondary = append(chA.Secondary, num)
+				chA.Secondary = append(chA.GetSecondary(), num)
 			}
 		}
 	}
 
 	// Processing digit channels
-	for i := 0; i < int(chD.ChannelTotal); i++ {
-		tempList = bytes.Split(lines[2+int(chA.ChannelTotal)+i], []byte(","))
+	for i := 0; i < int(chD.GetChannelTotal()); i++ {
+		tempList = bytes.Split(lines[2+int(chA.GetChannelTotal())+i], []byte(","))
 		if len(tempList) < 3 {
 			return errors.New("cfg format error")
 		}
 		if num, err := strconv.Atoi(ByteToString(tempList[0])); err != nil {
 			return err
 		} else {
-			chD.ChannelNumber = append(chD.ChannelNumber, uint16(num))
+			chD.ChannelNumber = append(chD.GetChannelNumber(), uint16(num))
 		}
-		chD.ChannelNames = append(chD.ChannelNames, ByteToString(bytes.Join(bytes.Split(tempList[1], []byte(" ")), []byte("_"))))
-		chD.ChannelPhases = append(chD.ChannelPhases, ByteToString(tempList[2]))
+		chD.ChannelNames = append(chD.GetChannelNames(), ByteToString(bytes.Join(bytes.Split(tempList[1], []byte(" ")), []byte("_"))))
+		chD.ChannelPhases = append(chD.GetChannelPhases(), ByteToString(tempList[2]))
 
 		// checking vector length to avoid IndexError
 		if len(tempList) > 3 {
 			// Channel element (usually null)
-			chD.ChannelElements = append(chD.ChannelElements, ByteToString(tempList[3]))
+			chD.ChannelElements = append(chD.GetChannelElements(), ByteToString(tempList[3]))
 		}
 		if len(tempList) > 4 {
 			if num, err := strconv.ParseUint(ByteToString(tempList[4]), 10, 8); err != nil {
 				return err
 			} else {
-				chD.InitialState = append(chD.InitialState, uint8(num))
+				chD.InitialState = append(chD.GetInitialState(), uint8(num))
 			}
 		}
 	}
 
 	// Read line frequency
-	tempList = bytes.Split(lines[2+chA.ChannelTotal+chD.ChannelTotal], []byte(","))
+	tempList = bytes.Split(lines[2+chA.GetChannelTotal()+chD.GetChannelTotal()], []byte(","))
 	if num, err := strconv.ParseFloat(ByteToString(tempList[0]), 64); err != nil {
 		return err
 	} else {
@@ -281,7 +575,7 @@ func (cfg *CFG) ReadCFG(rd io.Reader) (err error) {
 	}
 
 	// Read sampling rate num
-	tempList = bytes.Split(lines[3+chA.ChannelTotal+chD.ChannelTotal], []byte(","))
+	tempList = bytes.Split(lines[3+chA.GetChannelTotal()+chD.GetChannelTotal()], []byte(","))
 	if num, err := strconv.ParseUint(ByteToString(tempList[0]), 10, 16); err != nil {
 		return err
 	} else {
@@ -289,9 +583,9 @@ func (cfg *CFG) ReadCFG(rd io.Reader) (err error) {
 	}
 
 	// Read Sample number (@TODO only one sampling rate is taking into account)
-	for i := 0; i < int(cfg.SampleRateNum); i++ {
+	for i := 0; i < int(cfg.GetSampleRateNum()); i++ {
 		sampleRate := SampleRate{}
-		tempList = bytes.Split(lines[4+i+int(chA.ChannelTotal)+int(chD.ChannelTotal)], []byte(","))
+		tempList = bytes.Split(lines[4+i+int(chA.GetChannelTotal())+int(chD.GetChannelTotal())], []byte(","))
 		if num, err := strconv.ParseFloat(ByteToString(tempList[0]), 64); err != nil {
 			return err
 		} else {
@@ -302,11 +596,11 @@ func (cfg *CFG) ReadCFG(rd io.Reader) (err error) {
 		} else {
 			sampleRate.Number = num
 		}
-		cfg.SampleDetail = append(cfg.SampleDetail, sampleRate)
+		cfg.SampleDetail = append(cfg.GetSampleDetail(), sampleRate)
 	}
 
 	// Read start date and time ([dd,mm,yyyy,hh,mm,ss.ssssss])
-	tempList = bytes.Split(lines[4+cfg.SampleRateNum+chA.ChannelTotal+chD.ChannelTotal], []byte(","))
+	tempList = bytes.Split(lines[4+cfg.GetSampleRateNum()+chA.GetChannelTotal()+chD.GetChannelTotal()], []byte(","))
 	if start, err := time.Parse(TimeFormat, ByteToString(bytes.Join(tempList, []byte("T")))); err != nil {
 		return err
 	} else {
@@ -314,7 +608,7 @@ func (cfg *CFG) ReadCFG(rd io.Reader) (err error) {
 	}
 
 	// Read trigger date and time ([dd,mm,yyyy,hh,mm,ss.ssssss])
-	tempList = bytes.Split(lines[5+cfg.SampleRateNum+chA.ChannelTotal+chD.ChannelTotal], []byte(","))
+	tempList = bytes.Split(lines[5+cfg.GetSampleRateNum()+chA.GetChannelTotal()+chD.GetChannelTotal()], []byte(","))
 	if trigger, err := time.Parse(TimeFormat, ByteToString(bytes.Join(tempList, []byte("T")))); err != nil {
 		return err
 	} else {
@@ -322,11 +616,11 @@ func (cfg *CFG) ReadCFG(rd io.Reader) (err error) {
 	}
 
 	// Read dat content type
-	tempList = bytes.Split(lines[6+cfg.SampleRateNum+chA.ChannelTotal+chD.ChannelTotal], []byte(","))
+	tempList = bytes.Split(lines[6+cfg.GetSampleRateNum()+chA.GetChannelTotal()+chD.GetChannelTotal()], []byte(","))
 	cfg.DataFileType = ByteToString(tempList[0])
 
 	// Read time multiplication factor
-	tempList = bytes.Split(lines[7+cfg.SampleRateNum+chA.ChannelTotal+chD.ChannelTotal], []byte(","))
+	tempList = bytes.Split(lines[7+cfg.GetSampleRateNum()+chA.GetChannelTotal()+chD.GetChannelTotal()], []byte(","))
 	if !bytes.Equal(tempList[0], []byte("")) {
 		if num, err := strconv.ParseFloat(ByteToString(tempList[0]), 64); err != nil {
 			return err
@@ -354,26 +648,51 @@ func (cfg *CFG) ReadDAT(rd io.Reader) (err error) {
 // Returns an array of numbers containing the data values of the channel number
 // num is the number of the channel as in .cfg file
 func (cfg *CFG) GetAnalogChannelData(num uint16) (result []float64, err error) {
-	if bytes.Equal(cfg.DataFileContent, []byte("")) {
+	if cfg == nil {
+		return nil, errors.New("invalid cfg file, read .cfg first")
+	}
+
+	if cfg.GetDataFileContent() == nil || bytes.Equal(cfg.GetDataFileContent(), []byte("")) {
 		return nil, errors.New("not data content, read .dat first")
 	}
 
-	if num > cfg.AnalogDetail.ChannelTotal {
-		return nil, errors.New("channel number greater than the total number of channels")
+	analogDetail := cfg.GetAnalogDetail()
+	if analogDetail == nil {
+		return nil, errors.New("invalid analog channel")
+	}
+
+	if num > analogDetail.GetChannelTotal() {
+		return nil, errors.New("analog channel number greater than the total number of channels")
 	}
 
 	if num < 1 {
-		return nil, errors.New("channel number cannot be less than 1")
+		return nil, errors.New("analog channel number cannot be less than 1")
+	}
+
+	digitDetail := cfg.GetDigitDetail()
+	if digitDetail == nil {
+		return nil, errors.New("invalid digital channel")
 	}
 
 	// Number of bytes per Sample:
-	NB := 8 + int(cfg.AnalogDetail.ChannelTotal)<<1 + int(math.Ceil(float64(int(cfg.DigitDetail.ChannelTotal))/float64(16)))<<1
-	// Number of samples: @TODO - only take 1 rate into account
-	N := cfg.SampleDetail[0].Number
+	NB := 8 + int(analogDetail.GetChannelTotal())<<1 + int(math.Ceil(float64(int(digitDetail.GetChannelTotal()))/float64(16)))<<1
 
+	sampleDetail := cfg.GetSampleDetail()
+	if sampleDetail == nil || len(sampleDetail) == 0 {
+		return nil, errors.New("invalid or not enough sample detail")
+	}
+
+	dataFileContent := cfg.GetDataFileContent()
+	if dataFileContent == nil {
+		return nil, errors.New("invalid dat file content")
+	}
+
+	factor := analogDetail.GetConversionFactors()
+
+	// Number of samples: @TODO - only take 1 rate into account
 	// Reading the values from datFileContent string
-	for i := 0; i < N; i++ {
-		s := cfg.DataFileContent[i*NB : i*NB+NB]
+	for i := 0; i < sampleDetail[0].GetNumber(); i++ {
+		s := dataFileContent[i*NB : i*NB+NB]
 
 		var data struct {
 			Sample int32
@@ -392,32 +711,10 @@ func (cfg *CFG) GetAnalogChannelData(num uint16) (result []float64, err error) {
 			return nil, err
 		}
 
-		result = append(result, float64(value[num-1])*cfg.AnalogDetail.ConversionFactors["a"][num-1]+cfg.AnalogDetail.ConversionFactors["b"][num-1])
+		result = append(result, float64(value[num-1])*factor["a"][num-1]+factor["b"][num-1])
 	}
 
 	return result, nil
-}
-
-// Return the sampling rate
-// only one sampling rate is taking into account
-func (cfg *CFG) GetSamplingRate() float64 {
-	return cfg.SampleDetail[0].Rate
-}
-
-// Return the number of samples
-// only one sampling rate is taking into account
-func (cfg *CFG) GetSamplingNumber() int {
-	return cfg.SampleDetail[0].Number
-}
-
-// Return the names of all analog channel
-func (cfg *CFG) GetAnalogChannelNames() []string {
-	return cfg.AnalogDetail.ChannelNames
-}
-
-// Return sampling start time
-func (cfg *CFG) GetStartTime() time.Time {
-	return cfg.StartTime
 }
 
 // Convert []byte type file content to string
