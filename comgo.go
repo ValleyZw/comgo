@@ -585,10 +585,10 @@ func (cfg *CFG) ReadCFG(rd io.Reader) (err error) {
 		} else {
 			sampleRate.Rate = num
 		}
-		if num, err := strconv.Atoi(ByteToString(tempList[1])); err != nil {
+		if num, err := strconv.ParseFloat(ByteToString(tempList[1]), 64); err != nil {
 			return err
 		} else {
-			sampleRate.Number = num
+			sampleRate.Number = int(num)
 		}
 		cfg.SampleDetail = append(cfg.GetSampleDetail(), sampleRate)
 	}

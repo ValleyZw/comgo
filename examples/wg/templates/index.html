@@ -1,0 +1,171 @@
+{{/* Front end */}}
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Go Comtrade</title>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/dropzone/5.2.0/min/dropzone.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/dropzone/5.2.0/min/dropzone.min.js"></script>
+
+    <script src="//code.highcharts.com/stock/highstock.js"></script>
+    <script src="//code.highcharts.com/stock/modules/exporting.js"></script>
+</head>
+<body>
+
+<div class="ui container">
+    <form id="dropZone" class="dropzone ui raised segment" action="/" method="POST" enctype="multipart/form-data">
+        <div class="dz-message" data-dz-message>
+            <h4 class="ui header">Drop .cfg and .dat files here</h4>
+        </div>
+    </form>
+
+    <div class="ui raised segment">
+        <div class="ui stackable two column grid">
+            <div class="column">
+                <label for="analogIDs">Analog channels</label>
+                <select id="analogIDs" name="skills" multiple="" class="ui fluid dropdown"></select>
+                <br>
+                <button id="plot" class="fluid ui basic button">
+                    PLot
+                </button>
+            </div>
+            <div class="column">
+                <label for="digitIDs">Digit channels</label>
+                <select id="digitIDs" name="digital channels" multiple="" class="ui fluid dropdown"></select>
+                <br>
+                <button id="clear" class="fluid ui basic button">
+                    Clear
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="charts" class="ui raised segment"></div>
+</div>
+
+<script>
+    let $charts = $('#charts'), anaMap = {}, digMap = {}, ids = {anIds: [], diIds: []};
+
+    {{range .AnalogIds}}
+    anaMap[{{.Value}}] = {{.Points}}
+    {{end}};
+
+    {{range .DigitIds}}
+    digMap[{{.Value}}] = {{.Points}}
+    {{end}};
+
+    Dropzone.options.dropZone = {
+        clickable: false,
+        paramName: "comFiles",
+        uploadMultiple: true,
+        maxFiles: 4,
+        acceptedFiles: ".cfg,.dat,.hdr, .inf",
+        parallelUploads: 4,
+        queuecomplete: () => location.reload()
+    };
+
+    $('#analogIDs')
+            .dropdown({
+                values: {{.AnalogIds}},
+                onAdd: value => !ids.anIds.includes(anaMap[value]) && ids.anIds.push(anaMap[value]),
+                onRemove: value => ids.anIds = ids.anIds.filter(val => val !== anaMap[value])
+            })
+    ;
+
+    $('#digitIDs')
+            .dropdown({
+                values: {{.DigitIds}},
+                onAdd: value => !ids.diIds.includes(digMap[value]) && ids.diIds.push(digMap[value]),
+                onRemove: value => ids.diIds = ids.diIds.filter(val => val !== digMap[value])
+            })
+    ;
+
+    $('#plot').click(() => {
+        let count = ids.anIds.length + ids.diIds.length;
+        $charts.empty();
+
+        ids.anIds.map(v => {
+            $charts.append(`<div id=Analog-${v.key} style="height: ${`${100 / count}vh`}; border: solid #f2f2f2; margin-bottom: 4px"></div>`);
+            $('#plot').createChart(`Analog-${v.key}`, v)
+        });
+
+        ids.diIds.map(v => {
+            $charts.append(`<div id=Digit-${v.key} style="height: ${`${100 / count}vh`}; border: solid #f2f2f2; margin-bottom: 4px"></div>`)
+            $('#plot').createChart(`Digit-${v.key}`, v)
+        });
+
+    })
+    ;
+    $('#clear').click(() => {
+        return $charts.empty();
+    });
+
+    $.fn.createChart = (id, v) => {
+        return Highcharts.chart(id, {
+            credits: {
+                enabled: false
+            },
+            chart: {
+                zoomType: 'x'
+            },
+            title: {
+                text: id
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+
+            plotOptions: {
+                series: {
+                    marker: {
+                        enable: false
+                    },
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 1
+                },
+            },
+
+            xAxis: {
+                categories: v.point.x,
+                type: 'datetime',
+                labels: {
+                    step: 100 // displays every second category
+                }
+            },
+
+            series: [{
+                lineWidth: 0.5,
+                name: id.slice(id.indexOf("-") + 1),
+                data: v.point.y
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+        });
+    }
+</script>
+</body>
+</html>
