@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 )
@@ -67,7 +68,7 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		files := r.MultipartForm.File
 		fileNames := make(map[string]*multipart.FileHeader)
 		for _, v := range files {
-			fileNames[filepath.Ext(v[0].Filename)] = v[0]
+			fileNames[strings.ToLower(filepath.Ext(v[0].Filename))] = v[0]
 		}
 
 		cfg := comgo.New()
